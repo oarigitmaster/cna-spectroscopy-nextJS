@@ -1,0 +1,225 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.header {
+  max-width: 720px;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  color: #00a2e3;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.1;
+}
+
+.headerDescription {
+  margin: 0.75rem 0 0;
+  color: #666;
+  line-height: 1.6;
+}
+
+.profileCard {
+  overflow: hidden;
+  max-width: 900px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.cardHeader {
+  padding: 1.5rem 1.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cardHeader h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.cardHeader p {
+  margin: 0.4rem 0 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.details {
+  margin: 0;
+}
+
+.detailRow {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 1.5rem;
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid #f0f1f2;
+}
+
+.detailRow:last-child {
+  border-bottom: 0;
+}
+
+.detailRow dt {
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.detailRow dd {
+  margin: 0;
+  color: #1f2937;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-transform: capitalize;
+}
+
+.status::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00a2e3;
+  content: "";
+}
+
+@media (max-width: 640px) {
+  .detailRow {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}
+
+.input {
+  width: 100%;
+  max-width: 520px;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: #1f2937;
+  font: inherit;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.input:focus {
+  border-color: #00a2e3;
+  outline: none;
+  box-shadow: 0 0 0 3px
+    rgba(0, 162, 227, 0.12);
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1.25rem 1.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.saveButton {
+  padding: 0.7rem 1.15rem;
+  border: 0;
+  border-radius: 8px;
+  background: #00a2e3;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.saveButton:hover {
+  filter: brightness(0.94);
+}
+
+.saveButton:focus-visible {
+  outline: 3px solid
+    rgba(0, 162, 227, 0.25);
+  outline-offset: 2px;
+}
+
+.successMessage {
+  padding: 0.9rem 1rem;
+  border: 1px solid
+    rgba(0, 162, 227, 0.3);
+  border-radius: 10px;
+  background:
+    rgba(0, 162, 227, 0.08);
+  color: #087aa8;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.activityCard {
+  overflow: hidden;
+  max-width: 900px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.activityList {
+  display: flex;
+  flex-direction: column;
+}
+
+.activityRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.15rem 1.75rem;
+  border-bottom: 1px solid #f0f1f2;
+}
+
+.activityRow:last-child {
+  border-bottom: 0;
+}
+
+.activityPath {
+  margin: 0.35rem 0 0;
+  color: #6b7280;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.activityMeta {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 0.25rem;
+  color: #6b7280;
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.emptyActivity {
+  margin: 0;
+  padding: 1.5rem 1.75rem;
+  color: #6b7280;
+}
+
+@media (max-width: 640px) {
+  .activityRow {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .activityMeta {
+    text-align: left;
+  }
+}

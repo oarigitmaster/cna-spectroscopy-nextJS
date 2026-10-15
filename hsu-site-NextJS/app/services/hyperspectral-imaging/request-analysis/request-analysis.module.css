@@ -1,0 +1,263 @@
+.page {
+  background: #ffffff;
+  color: #17212b;
+}
+
+/* HERO */
+
+.hero {
+  padding:
+    6rem max(2rem, calc((100vw - 1400px) / 2))
+    5rem;
+
+  background: #101820;
+  color: #ffffff;
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+
+  color: #38a6cc;
+
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 900px;
+  margin: 0;
+
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.hero > p:last-child {
+  max-width: 720px;
+
+  margin: 1.5rem 0 0;
+
+  color: #c6d0d6;
+
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* MAIN CONTENT */
+
+.content {
+  width: min(1200px, calc(100% - 4rem));
+
+  margin: 0 auto;
+  padding: 6rem 0;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(340px, 0.7fr);
+
+  gap: 5rem;
+  align-items: start;
+}
+
+.instructions h2,
+.formCard h2,
+.help h2 {
+  margin: 0.4rem 0 1rem;
+
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.instructions > p:not(.eyebrow) {
+  color: #66727d;
+  line-height: 1.7;
+}
+
+.instructions ol {
+  margin: 2rem 0;
+  padding: 0;
+
+  list-style: none;
+  counter-reset: steps;
+}
+
+.instructions li {
+  position: relative;
+
+  min-height: 54px;
+
+  padding: 0 0 1.5rem 4rem;
+
+  color: #4f5d67;
+  line-height: 1.6;
+
+  counter-increment: steps;
+}
+
+.instructions li:not(:last-child) {
+  border-bottom: 1px solid #e0e4e7;
+  margin-bottom: 1.5rem;
+}
+
+.instructions li::before {
+  content: counter(steps, decimal-leading-zero);
+
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  color: #159dcc;
+
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* PDF CARD */
+
+.formCard {
+  padding: 2.5rem;
+
+  border: 1px solid #dce1e5;
+  border-radius: 10px;
+
+  background: #f7f9fa;
+}
+
+.formCard h2 {
+  font-size: 1.8rem;
+}
+
+.formCard > p:not(.eyebrow) {
+  margin-bottom: 2rem;
+
+  color: #66727d;
+  line-height: 1.65;
+}
+
+.primaryButton,
+.secondaryButton,
+.contactButton {
+  min-height: 48px;
+
+  padding: 0.8rem 1.15rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 5px;
+
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.primaryButton {
+  background: #148fb9;
+  color: #ffffff;
+}
+
+.primaryButton:hover {
+  background: #117ca3;
+  transform: translateY(-1px);
+}
+
+.secondaryButton {
+  margin-top: 0.75rem;
+
+  border: 1px solid #bcc5cd;
+
+  background: #ffffff;
+  color: #17212b;
+}
+
+.secondaryButton:hover {
+  border-color: #8f9ba4;
+  transform: translateY(-1px);
+}
+
+/* HELP / CONTACT */
+
+.help {
+  padding:
+    5rem max(2rem, calc((100vw - 1200px) / 2));
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 4rem;
+
+  background: #f3f6f7;
+  border-top: 1px solid #dce1e5;
+}
+
+.help > div {
+  max-width: 720px;
+}
+
+.help > div > p:not(.eyebrow) {
+  color: #66727d;
+  line-height: 1.7;
+}
+
+.contactButton {
+  flex: 0 0 auto;
+
+  background: #101820;
+  color: #ffffff;
+}
+
+.contactButton:hover {
+  background: #263640;
+  transform: translateY(-1px);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .help {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding:
+      4rem 1rem
+      3.5rem;
+  }
+
+  .content {
+    width: calc(100% - 2rem);
+    padding: 4rem 0;
+  }
+
+  .formCard {
+    padding: 1.5rem;
+  }
+
+  .help {
+    padding: 4rem 1rem;
+  }
+
+  .contactButton {
+    width: 100%;
+  }
+}

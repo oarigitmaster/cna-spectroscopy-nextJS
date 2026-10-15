@@ -1,0 +1,417 @@
+.page {
+  background: #ffffff;
+  color: #17212b;
+}
+
+/* -------------------------
+   HERO
+-------------------------- */
+
+.hero {
+  position: relative;
+  min-height: 620px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: #101820;
+}
+
+.heroImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(8, 18, 27, 0.94) 0%,
+      rgba(8, 18, 27, 0.78) 38%,
+      rgba(8, 18, 27, 0.28) 75%,
+      rgba(8, 18, 27, 0.15) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(8, 18, 27, 0.45) 0%,
+      transparent 50%
+    );
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  width: min(1400px, calc(100% - 4rem));
+  margin: 0 auto;
+  padding: 8rem 0 5.5rem;
+  color: #ffffff;
+}
+
+.heroEyebrow {
+  margin: 0 0 1rem;
+  color: #69cef1;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 850px;
+  margin: 0;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.hero h1 span {
+  display: block;
+  color: #35a9d1;
+}
+
+.heroLead {
+  max-width: 680px;
+  margin: 2rem 0 0;
+  color: #d5dde2;
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.heroTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 2.25rem;
+}
+
+.heroTags span {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid
+    rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background:
+    rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+}
+
+/* -------------------------
+   INTRODUCTION
+-------------------------- */
+
+.introduction {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 0.85fr)
+    minmax(0, 1.15fr);
+  gap: clamp(3rem, 7vw, 7rem);
+  align-items: start;
+}
+
+.introHeading {
+  max-width: 520px;
+}
+
+.introHeading h2,
+.sectionHeading h2,
+.capabilitiesIntro h2,
+.outcomesIntro h2 {
+  margin: 0;
+  font-size: clamp(2.1rem, 4vw, 3.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.introCopy {
+  max-width: 680px;
+  color: #5f6b75;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.introCopy p:first-child {
+  margin-top: 0;
+}
+
+.introCopy p:last-child {
+  margin-bottom: 0;
+}
+
+/* -------------------------
+   SHARED WIDTH
+-------------------------- */
+
+.inner {
+  width: min(1400px, calc(100% - 4rem));
+  margin: 0 auto;
+}
+
+/* -------------------------
+   MEASUREMENTS
+-------------------------- */
+
+.measurementsSection {
+  padding: 7rem 0;
+  background: #f4f7f9;
+}
+
+.sectionHeading {
+  max-width: 780px;
+  margin-bottom: 3rem;
+}
+
+.sectionHeading > p:last-child {
+  max-width: 680px;
+  margin-top: 1.25rem;
+  color: #66737d;
+  font-size: 1.03rem;
+  line-height: 1.7;
+}
+
+.measurementGrid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.measurementCard {
+  overflow: hidden;
+  border: 1px solid #dce2e6;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.measurementImage {
+  position: relative;
+  height: 360px;
+  overflow: hidden;
+  background: #dfe5e8;
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 350ms ease;
+}
+
+.measurementCard:hover .image {
+  transform: scale(1.025);
+}
+
+.measurementLabel {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 2;
+  padding: 0.45rem 0.65rem;
+  border-radius: 4px;
+  background: #101820;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.measurementContent {
+  padding: 2rem;
+}
+
+.measurementContent h3 {
+  margin: 0 0 0.8rem;
+  font-size: 1.55rem;
+}
+
+.measurementContent p {
+  margin: 0;
+  color: #66737d;
+  line-height: 1.7;
+}
+
+/* -------------------------
+   CAPABILITIES
+-------------------------- */
+
+.capabilities {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 0.8fr)
+    minmax(0, 1.2fr);
+  gap: clamp(3rem, 7vw, 7rem);
+  align-items: start;
+}
+
+.capabilitiesIntro {
+  max-width: 520px;
+}
+
+.capabilitiesIntro > p:last-child {
+  margin-top: 1.25rem;
+  color: #66737d;
+  line-height: 1.7;
+}
+
+.capabilityList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid #dce2e6;
+}
+
+.capabilityList li {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 1rem;
+  padding: 1.35rem 0;
+  border-bottom: 1px solid #dce2e6;
+}
+
+.capabilityList span {
+  color: #00a2e3;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.capabilityList p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* -------------------------
+   OUTCOMES
+-------------------------- */
+
+.outcomesSection {
+  padding: 7rem 0;
+  background: #101820;
+  color: #ffffff;
+}
+
+.outcomesLayout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 0.8fr)
+    minmax(0, 1.2fr);
+  gap: clamp(3rem, 7vw, 7rem);
+}
+
+.outcomesIntro {
+  max-width: 540px;
+}
+
+.darkEyebrow {
+  margin: 0 0 1rem;
+  color: #35a9d1;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.outcomesIntro > p:last-child {
+  margin-top: 1.25rem;
+  color: #bec8ce;
+  line-height: 1.7;
+}
+
+.outcomesGrid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: #3a4750;
+  border: 1px solid #3a4750;
+}
+
+.outcomeItem {
+  display: flex;
+  gap: 0.9rem;
+  min-height: 125px;
+  padding: 1.5rem;
+  background: #17232c;
+}
+
+.outcomeItem span {
+  color: #35a9d1;
+  font-weight: 700;
+}
+
+.outcomeItem p {
+  margin: 0;
+  color: #e3e8eb;
+  line-height: 1.6;
+}
+
+/* -------------------------
+   RESPONSIVE
+-------------------------- */
+
+@media (max-width: 900px) {
+  .introduction,
+  .capabilities,
+  .outcomesLayout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .measurementGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .measurementImage {
+    height: 420px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    min-height: 560px;
+  }
+
+  .heroContent,
+  .inner {
+    width: calc(100% - 2rem);
+  }
+
+  .heroContent {
+    padding: 7rem 0 3rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(
+      2.75rem,
+      15vw,
+      4rem
+    );
+  }
+
+  .heroLead {
+    font-size: 1rem;
+  }
+
+  .measurementsSection,
+  .outcomesSection {
+    padding: 5rem 0;
+  }
+
+  .measurementImage {
+    height: 280px;
+  }
+
+  .measurementContent {
+    padding: 1.5rem;
+  }
+
+  .outcomesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    transition: none;
+  }
+}

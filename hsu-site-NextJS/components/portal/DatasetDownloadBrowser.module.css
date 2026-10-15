@@ -1,0 +1,318 @@
+.browser {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+  margin-top: 2rem;
+}
+
+.selectionPanel,
+.filePanel {
+  background: #ffffff;
+  border: 1px solid #d9e1e5;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 6%);
+}
+
+.selectionPanel {
+  position: sticky;
+  top: 1.5rem;
+  padding: 1.5rem;
+}
+
+.selectionPanel h2 {
+  margin: 0.25rem 0 0.5rem;
+  overflow-wrap: anywhere;
+}
+
+.selectionPanel p {
+  margin: 0.4rem 0;
+}
+
+.label {
+  color: #49666f;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sizeSummary {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.sizeSummary strong {
+  color: #123f4a;
+  font-size: 1.3rem;
+}
+
+.progressTrack {
+  height: 10px;
+  margin-top: 0.65rem;
+  overflow: hidden;
+  background: #e4eaec;
+  border-radius: 999px;
+}
+
+.progressValue {
+  height: 100%;
+  background: #20758a;
+  border-radius: inherit;
+  transition: width 180ms ease;
+}
+
+.selectionDetails {
+  color: #52676d;
+  font-size: 0.85rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.primaryButton,
+.secondaryButton,
+.backButton,
+.rootButton,
+.openButton {
+  border-radius: 7px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.primaryButton {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  color: #ffffff;
+  background: #176b7e;
+  border: 1px solid #176b7e;
+  font-weight: 700;
+}
+
+.secondaryButton {
+  padding: 0.7rem 1rem;
+  color: #244951;
+  background: #ffffff;
+  border: 1px solid #aabcc1;
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.backButton:disabled,
+.rootButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.selectedList {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #d9e1e5;
+}
+
+.selectedList h3 {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+}
+
+.selectedRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 0.65rem 0;
+  border-top: 1px solid #edf0f1;
+  font-size: 0.8rem;
+}
+
+.selectedRow:first-of-type {
+  border-top: 0;
+}
+
+.selectedRow div {
+  min-width: 0;
+}
+
+.selectedRow strong,
+.selectedRow small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.selectedRow small {
+  margin-top: 0.2rem;
+  color: #687b80;
+}
+
+.selectedRow span {
+  flex-shrink: 0;
+}
+
+.filePanel {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #d9e1e5;
+}
+
+.backButton,
+.rootButton {
+  padding: 0.5rem 0.8rem;
+  color: #244951;
+  background: #ffffff;
+  border: 1px solid #aabcc1;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.8rem 1.25rem;
+  color: #5a6e73;
+  background: #f7f9f9;
+  border-bottom: 1px solid #d9e1e5;
+}
+
+.breadcrumbs span {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.breadcrumbs button {
+  padding: 0;
+  color: #176b7e;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.error {
+  margin: 1rem 1.25rem;
+  padding: 0.8rem 1rem;
+  color: #7c1f1f;
+  background: #fff1f1;
+  border: 1px solid #e3b5b5;
+  border-radius: 7px;
+}
+
+.loading,
+.empty {
+  padding: 2rem 1.25rem;
+  color: #617479;
+  text-align: center;
+}
+
+.fileList {
+  width: 100%;
+}
+
+.fileRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid #e6ebed;
+}
+
+.fileRow:last-child {
+  border-bottom: 0;
+}
+
+.fileRow:hover {
+  background: #f8fafb;
+}
+
+.fileRow input {
+  width: 18px;
+  height: 18px;
+  accent-color: #176b7e;
+}
+
+.fileInformation {
+  min-width: 0;
+}
+
+.fileInformation strong,
+.fileInformation small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.fileInformation small {
+  margin-top: 0.25rem;
+  color: #687b80;
+  font-size: 0.8rem;
+}
+
+.folderButton {
+  padding: 0;
+  color: #154f5c;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.folderButton:hover {
+  text-decoration: underline;
+}
+
+.downloadLink,
+.openButton {
+  white-space: nowrap;
+}
+
+.downloadLink {
+  color: #176b7e;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.downloadLink:hover {
+  text-decoration: underline;
+}
+
+.openButton {
+  padding: 0.45rem 0.7rem;
+  color: #176b7e;
+  background: transparent;
+  border: 1px solid #9db8bf;
+}
+
+@media (max-width: 900px) {
+  .browser {
+    grid-template-columns: 1fr;
+  }
+
+  .selectionPanel {
+    position: static;
+  }
+}
+
+@media (max-width: 600px) {
+  .fileRow {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .downloadLink,
+  .openButton {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}
