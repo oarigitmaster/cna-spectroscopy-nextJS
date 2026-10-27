@@ -1,8 +1,0 @@
-# .prettierignore
-
-.next
-node_modules
-coverage
-dist
-public
-package-lock.json
