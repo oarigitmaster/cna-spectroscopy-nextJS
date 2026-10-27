@@ -56,7 +56,10 @@ export default function HomePage() {
       <DepartmentHero />
 
       {/* CAPABILITIES */}
-      <section className="home-capabilities" id="capabilities">
+      <section
+        className="home-capabilities home-paper-section home-paper-section--warm"
+        id="capabilities"
+      >
         <div className="home-capabilities__heading">
           <h2>What We Offer</h2>
 
@@ -86,6 +89,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <PortalSection />
+
       <VideoFeature
         videoId="hBLTfg20P4M"
         poster="https://img.youtube.com/vi/hBLTfg20P4M/maxresdefault.jpg"
@@ -94,7 +99,10 @@ export default function HomePage() {
       />
 
       {/* WHO WE SERVE */}
-      <section className="home-audience" id="who-we-serve">
+      <section
+        className="home-audience home-paper-section home-paper-section--cool"
+        id="who-we-serve"
+      >
         <div className="home-audience__heading">
           <h2>Who We Serve</h2>
 
@@ -125,7 +133,6 @@ export default function HomePage() {
         linkLabel="Start a conversation"
       />
 
-      <PortalSection />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import DrillcoreSlideshow from "@/components/database/DrillcoreSlideshow";
+import PortalAccessCallout from "@/components/database/PortalAccessCallout";
 import styles from "@/components/database/database.module.css";
 import { getDrillcore, getDrillcoreImages } from "@/lib/data/drillcores";
 import { publicS3Asset } from "@/lib/storage/public-s3";
@@ -55,6 +56,7 @@ export default async function DrillcorePage({
           {core.Library || "CNA collection"}
         </p>
       </header>
+      <PortalAccessCallout />
       <dl className={styles.detailGrid}>
         {detailFields
           .filter((field) => core[field])
@@ -84,6 +86,7 @@ export default async function DrillcorePage({
       </div>
       <DrillcoreSlideshow coreId={id} images={images} />
       <DrillcoreMineralogyChart
+        key={id}
         coreId={id}
       />
     </main>

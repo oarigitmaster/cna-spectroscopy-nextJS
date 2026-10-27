@@ -18,12 +18,16 @@ import {
 import {
   getCAIRRequestIdentity,
 } from "@/lib/cair/request-identity";
+import { readJsonWithLimit, RequestBodyTooLargeError } from "@/lib/cair/request-body";
+import { acquireDirectTransferSlot, releaseSlotWithStream } from "@/lib/downloads/admission";
 import {
   getMaxDownloadBytes,
 } from "@/lib/downloads/limits";
 import {
   buildCAIRManifest,
+  isPublicCAIRPath,
   openCAIRFile,
+  safeRemotePath,
 } from "@/lib/storage/cair-storage";
 import {
   logUserActivity,
@@ -202,8 +206,11 @@ export async function POST(
   let body: unknown;
 
   try {
-    body = await request.json();
-  } catch {
+    body = await readJsonWithLimit(request, 64 * 1024);
+  } catch (error) {
+    if (error instanceof RequestBodyTooLargeError) {
+      return NextResponse.json({ error: "Request body is too large." }, { status: 413 });
+    }
     return NextResponse.json(
       {
         error: "Invalid request body.",
@@ -237,6 +244,37 @@ export async function POST(
     );
   }
 
+  if (
+    paths.length > 100 ||
+    paths.some((selectedPath) => {
+      if (
+        selectedPath.length > 1024 ||
+        selectedPath.startsWith("/") ||
+        selectedPath.includes("\\") ||
+        !isPublicCAIRPath(selectedPath, dataset.hiddenDirectories)
+      ) return true;
+      try {
+        safeRemotePath(source.root, selectedPath);
+        return false;
+      } catch {
+        return true;
+      }
+    })
+  ) {
+    return NextResponse.json(
+      { error: "Too many selections or an invalid path." },
+      { status: 400 },
+    );
+  }
+
+  const release = acquireDirectTransferSlot(identity);
+  if (!release) {
+    return NextResponse.json(
+      { error: "Too many active direct downloads. Retry later." },
+      { status: 429, headers: { "Retry-After": "30" } },
+    );
+  }
+
   try {
     const manifests: Awaited<
       ReturnType<
@@ -252,6 +290,7 @@ export async function POST(
         await buildCAIRManifest(
           source.root,
           selectedPath,
+          dataset.hiddenDirectories,
         );
 
       manifests.push(manifest);
@@ -273,13 +312,13 @@ export async function POST(
         0,
       );
 
-    const maxDownloadBytes =
-      getMaxDownloadBytes();
+    const maxDownloadBytes = getMaxDownloadBytes();
 
     if (
       totalBytes >
       maxDownloadBytes
     ) {
+      release();
       return NextResponse.json(
         {
           error:
@@ -294,6 +333,7 @@ export async function POST(
     }
 
     if (fileCount === 0) {
+      release();
       return NextResponse.json(
         {
           error:
@@ -341,82 +381,31 @@ export async function POST(
         });
 
 
-    const output =
-      new ReadableStream<Uint8Array>({
-        start(controller) {
-          archive.on(
-            "data",
-            (chunk: Buffer) => {
-              controller.enqueue(
-                new Uint8Array(
-                  chunk,
-                ),
-              );
-            },
-          );
+    const output = Readable.toWeb(archive as unknown as Readable) as ReadableStream<Uint8Array>;
 
-          archive.on(
-            "end",
-            () => {
-              controller.close();
-            },
-          );
-
-          archive.on(
-            "error",
-            (error: Error) => {
-              controller.error(
-                error,
-              );
-            },
-          );
-
-          void (async () => {
-            try {
-              for (
-                const manifest
-                of manifests
-              ) {
-                for (
-                  const file
-                  of manifest.files
-                ) {
-                  await appendCAIRFileToArchive(
-                    archive,
-                    source.root,
-                    file.path,
-                    file.path,
-                  );
-                }
-              }
-
-              await archive.finalize();
-            } catch (error) {
-              archive.destroy();
-
-              console.error(
-                "Failed while streaming CAIR ZIP:",
-                error,
-              );
-
-              controller.error(
-                error instanceof Error
-                  ? error
-                  : new Error(
-                      "Failed while streaming CAIR ZIP.",
-                    ),
-              );
-            }
-          })();
-        },
-
-        cancel() {
-          archive.destroy();
-        },
-      });
+    void (async () => {
+      try {
+        for (const manifest of manifests) {
+          for (const file of manifest.files) {
+            await appendCAIRFileToArchive(
+              archive,
+              source.root,
+              file.path,
+              file.path,
+            );
+          }
+        }
+        await archive.finalize();
+      } catch (error) {
+        console.error("Failed while streaming CAIR ZIP:", error);
+        archive.destroy(
+          error instanceof Error ? error : new Error("Failed while streaming CAIR ZIP."),
+        );
+      }
+    })();
 
     return new Response(
-      output,
+      releaseSlotWithStream(output, release),
       {
         status: 200,
         headers: {
@@ -432,6 +421,7 @@ export async function POST(
       },
     );
   } catch (error) {
+    release();
     console.error(
       "Failed to prepare CAIR archive:",
       error,

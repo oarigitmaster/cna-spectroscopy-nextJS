@@ -17,8 +17,8 @@ export const mainNavigation: NavigationItem[] = [
   {
     label: "Resources",
     children: [
-      { label: "Mineral Database", href: "/mindatabase" },
       { label: "Drillcore Database", href: "/coredatabase" },
+      { label: "Client Portal", href: "/login" },
     ],
   },
   {

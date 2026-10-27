@@ -21,10 +21,10 @@ const partners = [
 
 export function PartnersStrip() {
   return (
-    <section className="partners-strip">
+    <section className="partners-strip home-paper-section home-paper-section--unified">
       <div className="partners-strip__inner">
         <div className="partners-strip__heading">
-          <h2>Working with research and industry partners</h2>
+          <h2>Research and Industry Partners</h2>
 
           <p>
             The HSU works with government, industry, and research partners to support

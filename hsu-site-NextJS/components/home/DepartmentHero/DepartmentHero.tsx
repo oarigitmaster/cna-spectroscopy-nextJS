@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./DepartmentHero.module.css";
 
@@ -72,14 +71,6 @@ export default function DepartmentHero() {
           to help industry understand materials, solve technical challenges, and make
           informed decisions.
         </p>
-        <div className={styles.actions}>
-          <Link href="/services" className={styles.primaryButton}>
-            Explore our capabilities<span aria-hidden="true">→</span>
-          </Link>
-          <Link href="/contact" className={styles.secondaryButton}>
-            Work with us
-          </Link>
-        </div>
       </div>
       <div className={styles.controls} role="group" aria-label="Hero background images">
         {slides.map((slide, index) => (
@@ -103,7 +94,20 @@ export default function DepartmentHero() {
               paused ? "Play background slideshow" : "Pause background slideshow"
             }
           >
-            {paused ? "Play" : "Pause"}
+            <svg
+              className={styles.pauseIcon}
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              {paused ? (
+                <path d="M8 5v14l11-7z" />
+              ) : (
+                <>
+                  <rect x="7" y="5" width="3.5" height="14" rx="1" />
+                  <rect x="13.5" y="5" width="3.5" height="14" rx="1" />
+                </>
+              )}
+            </svg>
           </button>
         )}
       </div>

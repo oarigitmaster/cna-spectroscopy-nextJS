@@ -14,8 +14,10 @@ import {
 import {
   getCAIRRequestIdentity,
 } from "@/lib/cair/request-identity";
+import { acquireDirectTransferSlot, releaseSlotWithStream } from "@/lib/downloads/admission";
 import {
   CAIRRangeNotSatisfiableError,
+  isPublicCAIRPath,
   openCAIRFile,
 } from "@/lib/storage/cair-storage";
 import {
@@ -114,8 +116,20 @@ export async function GET(
     );
   }
 
+  if (!isPublicCAIRPath(relativePath, dataset.hiddenDirectories)) {
+    return NextResponse.json({ error: "File not found." }, { status: 404 });
+  }
+
     const rangeHeader =
     request.headers.get("range");
+
+    const release = acquireDirectTransferSlot(identity);
+    if (!release) {
+      return NextResponse.json(
+        { error: "Too many active direct downloads. Retry later." },
+        { status: 429, headers: { "Cache-Control": "private, no-store", "Retry-After": "30" } },
+      );
+    }
 
     try {
       const file =
@@ -124,33 +138,6 @@ export async function GET(
           relativePath,
           rangeHeader,
         );
-
-      if (
-        identity.kind === "portal-user" &&
-        !rangeHeader
-      ) {
-        try {
-          await logUserActivity({
-            userID: identity.userID,
-            action: "file.download",
-            datasetID: datasetId,
-            sourceID: sourceId,
-            path: relativePath,
-            fileCount: 1,
-            totalBytes: file.size,
-          });
-        } catch (activityError) {
-          console.error(
-            "Unable to log file download activity:",
-            {
-              datasetId,
-              sourceId,
-              relativePath,
-              activityError,
-            },
-          );
-        }
-      }
 
       if (
         identity.kind === "portal-user" &&
@@ -219,7 +206,7 @@ export async function GET(
       }
 
       return new Response(
-        file.stream,
+        releaseSlotWithStream(file.stream, release),
         {
           status:
             file.range ? 206 : 200,
@@ -227,6 +214,7 @@ export async function GET(
         },
       );
     } catch (error) {
+      release();
       if (
         error instanceof
         CAIRRangeNotSatisfiableError

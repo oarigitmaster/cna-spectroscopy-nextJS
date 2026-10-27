@@ -72,6 +72,14 @@ const rangeCommand =
   `-o "first-100-bytes.bin" ` +
   `"$downloadUrl"`;
 
+const largeTransferCommand =
+  `$filePath = "1M-10-0001/LWIR/REPLACE_WITH_FILE.bin"; ` +
+  `$encodedPath = [Uri]::EscapeDataString($filePath); ` +
+  `$downloadUrl = "${apiBaseUrl}/api/v1/datasets/pasadena/sources/raw/download?path=$encodedPath"; ` +
+  `curl.exe -L --fail --retry 5 --retry-delay 30 -C - ` +
+  `-o "REPLACE_WITH_FILE.bin" ` +
+  `-H "Authorization: Bearer $accessToken" "$downloadUrl"`;
+
 const pythonExample = `import requests
 
 API_BASE_URL = "${apiBaseUrl}"
@@ -157,6 +165,10 @@ export default function ApiAccessPage() {
 
             <a href="#download">
               Download files
+            </a>
+
+            <a href="#large-transfers">
+              Large transfers
             </a>
 
             <a href="#python">
@@ -376,11 +388,28 @@ export default function ApiAccessPage() {
             />
           </section>
 
+          <section id="large-transfers" className={styles.section}>
+            <h2>7. Download a large file</h2>
+
+            <p>
+              Large files stream directly from the data server through the API.
+              Downloads are limited to protect site capacity. If the request
+              is interrupted, run the same command again to resume it.
+            </p>
+
+            <ApiCodeBlock code={largeTransferCommand} />
+
+            <p>
+              Keep your access token private. A busy server may return 429;
+              wait for the Retry-After interval before retrying.
+            </p>
+          </section>
+
           <section
             id="python"
             className={styles.section}
           >
-            <h2>7. Python example</h2>
+            <h2>8. Python example</h2>
 
             <p>
               Python clients can make the same
@@ -464,6 +493,11 @@ export default function ApiAccessPage() {
                     </td>
                   </tr>
 
+                  <tr>
+                    <td><code>429</code></td>
+                    <td>Too many active transfers</td>
+                    <td>Wait for the Retry-After interval.</td>
+                  </tr>
                   <tr>
                     <td>
                       <code>416</code>

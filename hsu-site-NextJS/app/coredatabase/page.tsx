@@ -1,4 +1,5 @@
 import DrillcoreExplorer from "@/components/database/DrillcoreExplorer";
+import PortalAccessCallout from "@/components/database/PortalAccessCallout";
 import styles from "@/components/database/database.module.css";
 import { getDrillcoreMapRecords } from "@/lib/data/drillcores";
 
@@ -24,6 +25,7 @@ export default async function CoreDatabasePage() {
         </p>
       </header>
 
+      <PortalAccessCallout />
       <DrillcoreExplorer drillcores={drillcores} />
     </main>
   );

@@ -1,5 +1,4 @@
 .page {
-  background: #ffffff;
   color: #17212b;
 }
 
@@ -156,7 +155,7 @@
 
 .measurementsSection {
   padding: 7rem 0;
-  background: #f4f7f9;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .sectionHeading {

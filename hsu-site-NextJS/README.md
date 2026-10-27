@@ -48,3 +48,7 @@ Endpoints:
 The current permission store is JSON configuration (`CAIR_DATASET_ACCESS_JSON`) so the access boundary can be tested before a PostgreSQL metadata/permissions database is introduced. Dataset roots are server-only and are stripped from API responses.
 
 This phase adds the `ssh2` package. Run `npm install` once after pulling these changes so your normal npm registry can update `package-lock.json`.
+
+## Large dataset transfers
+
+Large single files stream directly from CAIR SFTP through the authenticated API, with concurrency and bandwidth limits. HTTP byte ranges let clients resume interrupted downloads. See [direct-download setup and operations](docs/direct-downloads.md) before enabling large transfers in production.

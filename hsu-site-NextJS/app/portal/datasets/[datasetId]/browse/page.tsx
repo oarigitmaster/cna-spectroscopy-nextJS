@@ -3,7 +3,10 @@ import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { getAuthorizedCAIRDataset } from "@/lib/cair/service";
-import { listCAIRDirectory } from "@/lib/storage/cair-storage";
+import {
+  isPublicCAIRPath,
+  listCAIRDirectory,
+} from "@/lib/storage/cair-storage";
 
 export default async function CAIRDirectoryBrowserPage({
   params,
@@ -36,6 +39,15 @@ export default async function CAIRDirectoryBrowserPage({
   }
 
   const relativePath = requestedPath?.trim() ?? "";
+
+  if (
+    !isPublicCAIRPath(
+      relativePath,
+      dataset.hiddenDirectories,
+    )
+  ) {
+    notFound();
+  }
 
   const allEntries = await listCAIRDirectory(
     dataset.browseRoot,

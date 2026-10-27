@@ -61,7 +61,7 @@ const signalPath = Array.from({ length: 1601 }, (_, x) => {
 export default function LibsPage() {
   const content = serviceContent.libs;
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} service-paper-page`}>
       <header className={"page-header " + styles.intro}>
         {/* Decorative spectrum pattern; not measured LIBS data. */}
         <div className={styles.signalBackground} aria-hidden="true">

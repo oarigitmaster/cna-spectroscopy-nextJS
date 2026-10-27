@@ -9,11 +9,13 @@ import {
 import {
   getCAIRRequestIdentity,
 } from "@/lib/cair/request-identity";
+import { acquireScanSlot } from "@/lib/downloads/admission";
 import {
   getAuthorizedCAIRDatasetForIdentity,
 } from "@/lib/cair/request-authorization";
 import {
   getCAIRDirectoryInfo,
+  isPublicCAIRPath,
   listCAIRDirectory,
 } from "@/lib/storage/cair-storage";
 
@@ -93,12 +95,26 @@ export async function GET(
       "path",
     ) ?? "";
 
+  if (!isPublicCAIRPath(relativePath, dataset.hiddenDirectories)) {
+    return NextResponse.json({ error: "Path not found." }, { status: 404 });
+  }
+
+  const release = acquireScanSlot(identity);
+  if (!release) {
+    return NextResponse.json(
+      { error: "Too many active scans. Retry later." },
+      { status: 429, headers: { "Retry-After": "30" } },
+    );
+  }
+
   try {
-    const files =
+    const entries =
       await listCAIRDirectory(
         source.root,
         relativePath,
       );
+    const hidden = new Set(dataset.hiddenDirectories ?? []);
+    const files = entries.filter((entry) => !hidden.has(entry.name));
 
     const sourceDirectory =
       getCAIRDirectoryInfo(source.root);
@@ -139,5 +155,7 @@ export async function GET(
         status: 502,
       },
     );
+  } finally {
+    release();
   }
 }

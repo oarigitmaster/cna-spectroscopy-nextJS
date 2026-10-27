@@ -36,7 +36,7 @@ const measurements = [
 
 export default function GeotekPage() {
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} service-paper-page`}>
       {/* HERO */}
       <section className={styles.hero}>
         <Image

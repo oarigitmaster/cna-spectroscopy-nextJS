@@ -40,6 +40,22 @@ export function isPublicCAIREntry(
   return !HIDDEN_CAIR_NAMES.has(name);
 }
 
+export function isPublicCAIRPath(
+  relativePath: string,
+  hiddenDirectories: readonly string[] = [],
+): boolean {
+  const hidden = new Set(hiddenDirectories);
+
+  return relativePath
+    .split("/")
+    .filter(Boolean)
+    .every(
+      (segment) =>
+        isPublicCAIREntry(segment) &&
+        !hidden.has(segment),
+    );
+}
+
 export type CAIRPathSummary = {
   path: string;
   type: "file" | "directory";
@@ -204,6 +220,12 @@ export function safeRemotePath(
   root: string,
   relativePath = "",
 ): string {
+  if (!isPublicCAIRPath(relativePath)) {
+    throw new Error(
+      "Requested path is hidden.",
+    );
+  }
+
   const rawSegments = relativePath
     .split("/")
     .filter(Boolean);
@@ -557,7 +579,12 @@ export async function openCAIRFile(
 export async function summarizeCAIRPath(
   root: string,
   relativePath = "",
+  hiddenDirectories: readonly string[] = [],
 ): Promise<CAIRPathSummary> {
+  if (!isPublicCAIRPath(relativePath, hiddenDirectories)) {
+    throw new Error("Requested path is hidden.");
+  }
+  const hidden = new Set(hiddenDirectories);
   const remotePath = safeRemotePath(
     root,
     relativePath,
@@ -602,7 +629,9 @@ export async function summarizeCAIRPath(
     for (const entry of entries) {
       if (
         entry.filename === "." ||
-        entry.filename === ".."
+        entry.filename === ".." ||
+        !isPublicCAIREntry(entry.filename) ||
+        hidden.has(entry.filename)
       ) {
         continue;
       }
@@ -695,7 +724,12 @@ export async function summarizeCAIRPath(
 export async function buildCAIRManifest(
   root: string,
   relativePath = "",
+  hiddenDirectories: readonly string[] = [],
 ): Promise<CAIRManifest> {
+  if (!isPublicCAIRPath(relativePath, hiddenDirectories)) {
+    throw new Error("Requested path is hidden.");
+  }
+  const hidden = new Set(hiddenDirectories);
   const normalizedRelativePath =
     path.posix
       .normalize(relativePath)
@@ -747,7 +781,9 @@ export async function buildCAIRManifest(
     for (const entry of entries) {
       if (
         entry.filename === "." ||
-        entry.filename === ".."
+        entry.filename === ".." ||
+        !isPublicCAIREntry(entry.filename) ||
+        hidden.has(entry.filename)
       ) {
         continue;
       }

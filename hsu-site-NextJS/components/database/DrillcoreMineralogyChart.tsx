@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   coreId: string;
@@ -9,120 +9,67 @@ type Props = {
 const S3_BASE =
   "https://cna-webfiles.s3.amazonaws.com/webdata/drillcore";
 
+function addBaseHref(html: string, url: string) {
+  const baseHref = url.slice(0, url.lastIndexOf("/") + 1);
+  const baseTag = `<base href="${baseHref}">`;
+  const headTag = /<head\b[^>]*>/i;
+
+  return headTag.test(html)
+    ? html.replace(headTag, (head) => `${head}${baseTag}`)
+    : `${baseTag}${html}`;
+}
+
 export default function DrillcoreMineralogyChart({
   coreId,
 }: Props) {
-  const containerRef =
-    useRef<HTMLDivElement>(null);
-
-  const [loading, setLoading] =
+  const [chartDocument, setChartDocument] =
+    useState<string | null>(null);
+  const [checking, setChecking] =
     useState(true);
+  const [frameLoaded, setFrameLoaded] =
+    useState(false);
 
-  const [available, setAvailable] =
-    useState(true);
+  const encodedId = encodeURIComponent(coreId);
+  const url =
+    `${S3_BASE}/${encodedId}/` +
+    `${encodedId}_DATA.html`;
 
   useEffect(() => {
-    let cancelled = false;
+    const controller = new AbortController();
 
-    async function loadChart() {
+    async function checkChart() {
       try {
-        setLoading(true);
-
-        const url =
-          `${S3_BASE}/${encodeURIComponent(coreId)}/` +
-          `${encodeURIComponent(coreId)}_DATA.html`;
-
-        const response = await fetch(url);
-
-        if (!response.ok) {
-          if (!cancelled) {
-            setAvailable(false);
-            setLoading(false);
-          }
-
-          return;
-        }
-
-        const html = await response.text();
-
-        if (
-          cancelled ||
-          !containerRef.current
-        ) {
-          return;
-        }
-
-        const container =
-          containerRef.current;
-
-        container.innerHTML = html;
-
-        /*
-         * Setting innerHTML does not execute
-         * script tags, so recreate them.
-         *
-         * This mirrors the behavior of the
-         * original Node/EJS drillcore page.
-         */
-        const scripts =
-          container.querySelectorAll("script");
-
-        scripts.forEach((oldScript) => {
-          const newScript =
-            document.createElement("script");
-
-          Array.from(
-            oldScript.attributes,
-          ).forEach((attribute) => {
-            newScript.setAttribute(
-              attribute.name,
-              attribute.value,
-            );
-          });
-
-          if (oldScript.src) {
-            newScript.src =
-              oldScript.src;
-          } else {
-            newScript.textContent =
-              oldScript.textContent;
-          }
-
-          oldScript.replaceWith(
-            newScript,
-          );
+        const response = await fetch(url, {
+          signal: controller.signal,
         });
 
-        if (!cancelled) {
-          setAvailable(true);
-          setLoading(false);
+        if (response.ok) {
+          const html = await response.text();
+
+          if (!controller.signal.aborted) {
+            setChartDocument(addBaseHref(html, url));
+          }
         }
       } catch (error) {
-        console.error(
-          `Unable to load mineralogy chart for ${coreId}:`,
-          error,
-        );
-
-        if (!cancelled) {
-          setAvailable(false);
-          setLoading(false);
+        if (!controller.signal.aborted) {
+          console.error(
+            `Unable to load mineralogy chart for ${coreId}:`,
+            error,
+          );
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setChecking(false);
         }
       }
     }
 
-    void loadChart();
+    void checkChart();
 
-    return () => {
-      cancelled = true;
+    return () => controller.abort();
+  }, [coreId, url]);
 
-      if (containerRef.current) {
-        containerRef.current.innerHTML =
-          "";
-      }
-    };
-  }, [coreId]);
-
-  if (!available) {
+  if (!checking && chartDocument === null) {
     return null;
   }
 
@@ -143,16 +90,24 @@ export default function DrillcoreMineralogyChart({
         </p>
       </div>
 
-      {loading ? (
+      {checking || !frameLoaded ? (
         <p className="drillcore-chart-loading">
           Loading mineralogy chart...
         </p>
       ) : null}
 
-      <div
-        ref={containerRef}
-        className="drillcore-mineralogy-chart"
-      />
+      {chartDocument !== null ? (
+        <div className="drillcore-mineralogy-frame">
+          <iframe
+            className="drillcore-mineralogy-chart"
+            srcDoc={chartDocument}
+            title={`Hyperspectral mineralogy chart for drillcore ${coreId}`}
+            sandbox="allow-scripts"
+            referrerPolicy="no-referrer"
+            onLoad={() => setFrameLoaded(true)}
+          />
+        </div>
+      ) : null}
     </section>
   );
 }

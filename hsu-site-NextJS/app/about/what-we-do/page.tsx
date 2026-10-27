@@ -410,17 +410,17 @@ export default function WhatWeDoPage() {
               <strong>Explore service →</strong>
             </Link>
 
-            <Link href="/resources/minerals">
-              <span>Database</span>
-              <h3>Minerals Database</h3>
+            <Link href="/login">
+              <span>Client access</span>
+              <h3>Client Portal</h3>
               <p>
-                Explore spectral and supporting information from the HSU mineral
-                reference collection.
+                Access the full datasets and project resources shared with your
+                organization.
               </p>
-              <strong>Explore minerals →</strong>
+              <strong>Open client portal →</strong>
             </Link>
 
-            <Link href="/resources/drillcores">
+            <Link href="/coredatabase">
               <span>Database</span>
               <h3>Drill Core Database</h3>
               <p>

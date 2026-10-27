@@ -37,11 +37,9 @@ export function Footer() {
           <h2>Resources</h2>
 
           <nav aria-label="Footer resources navigation">
-            <Link href="/mindatabase">Minerals Database</Link>
-
             <Link href="/coredatabase">Drillcore Database</Link>
 
-            <Link href="/portal/datasets">CAIR Data Library</Link>
+            <Link href="/login">Client Portal</Link>
 
             <Link href="/faq">FAQ</Link>
           </nav>

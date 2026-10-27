@@ -43,3 +43,4 @@ export function getMaxScanEntries(): number {
     DEFAULT_MAX_SCAN_ENTRIES,
   );
 }
+

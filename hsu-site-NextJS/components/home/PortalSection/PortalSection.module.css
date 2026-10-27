@@ -1,39 +1,195 @@
 .portalSection {
-  margin: 5rem auto;
-  padding: 4rem 2rem;
-  max-width: 1100px;
-  background: #f7f9fb;
-  border-radius: 16px;
-  text-align: center;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 2.5rem max(2rem, calc((100vw - 1500px) / 2));
+  background: linear-gradient(90deg, #f4f8f7 0%, #eaf4f3 52%, #dff0f2 100%);
+  color: #0b3654;
+}
+
+.portalSection::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(7, 30, 50, 0.11) 0 0.65px, transparent 0.85px),
+    repeating-linear-gradient(
+      0deg,
+      rgba(7, 30, 50, 0.025) 0,
+      rgba(7, 30, 50, 0.025) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  background-size: 19px 21px, 100% 4px;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  content: "";
+}
+
+.portalSection::after {
+  display: none;
 }
 
 .content {
-  max-width: 700px;
+  display: grid;
+  grid-template-areas:
+    "title title"
+    "description description"
+    "features action";
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  align-items: center;
+  column-gap: clamp(2rem, 4vw, 3.5rem);
+  row-gap: 1.35rem;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: clamp(2.25rem, 4vw, 3rem);
+  border: 1px solid rgba(98, 206, 219, 0.32);
+  border-radius: 0.8rem;
+  background: linear-gradient(125deg, #071e32 0%, #092a45 100%);
+  color: white;
+  box-shadow:
+    0 18px 45px rgba(7, 30, 50, 0.14),
+    inset 0 1px rgba(255, 255, 255, 0.07);
 }
 
-.portalSection h2 {
-  margin-bottom: 1rem;
-  font-size: 2rem;
+.content h2 {
+  grid-area: title;
+  margin: 0;
+  font-size: clamp(2.4rem, 4vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  text-align: center;
 }
 
-.portalSection p {
-  margin-bottom: 2rem;
-  color: #555;
+.description {
+  grid-area: description;
+  max-width: 720px;
+  margin: 0 auto 0.7rem;
+  color: rgba(255, 255, 255, 0.74);
   line-height: 1.7;
+  text-align: center;
 }
 
 .button {
-  display: inline-block;
-  padding: 0.9rem 1.8rem;
-  border-radius: 10px;
-  background: #0056b3;
-  color: white;
+  grid-area: action;
+  display: inline-flex;
+  min-height: 3.75rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: min(100%, 300px);
+  justify-self: end;
+  padding: 0.6rem 0.65rem 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  background: white;
+  color: #071e32;
+  font-size: 1rem;
+  font-weight: 700;
   text-decoration: none;
-  font-weight: 600;
-  transition: background 0.2s ease;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.buttonIcon {
+  display: grid;
+  flex: 0 0 2.45rem;
+  width: 2.45rem;
+  height: 2.45rem;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(0, 162, 227);
+  color: #071e32;
+  font-size: 1.2rem;
 }
 
 .button:hover {
-  background: #003f82;
+  transform: translateY(-2px);
+  background: #eaf7fb;
+}
+
+.button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 4px;
+}
+
+.details {
+  grid-area: features;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.details li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 1.8rem;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.details li::before {
+  display: grid;
+  flex: 0 0 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(0, 162, 227);
+  color: #071e32;
+  content: "✓";
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .portalSection {
+    padding: 2.25rem 2rem;
+  }
+
+  .content {
+    grid-template-areas:
+      "title"
+      "description"
+      "features"
+      "action";
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    row-gap: 1.5rem;
+  }
+
+  .button {
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
+  }
+}
+
+@media (max-width: 600px) {
+  .portalSection {
+    padding: 1.5rem 1rem;
+  }
+
+  .content {
+    padding: 1.75rem 1.4rem;
+  }
+
+  .details {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+
+  .button:hover {
+    transform: none;
+  }
 }

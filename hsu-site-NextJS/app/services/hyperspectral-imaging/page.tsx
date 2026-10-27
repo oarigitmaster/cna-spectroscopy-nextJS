@@ -157,7 +157,7 @@ const process = [
 
 export default function HyperspectralImagingPage() {
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} service-paper-page`}>
       <Hero />
 
       {/* INTRODUCTION */}
@@ -461,10 +461,10 @@ export default function HyperspectralImagingPage() {
         </div>
 
         <div className={styles.resourceLinks}>
-          <Link href="/mindatabase" className={styles.resourceCard}>
-            <h3>Minerals Database</h3>
-            <p>Explore mineral samples and associated spectral data.</p>
-            <strong>Explore database →</strong>
+          <Link href="/login" className={styles.resourceCard}>
+            <h3>Client Portal</h3>
+            <p>Access complete datasets and project resources shared with your organization.</p>
+            <strong>Open client portal →</strong>
           </Link>
 
           <Link href="/coredatabase" className={styles.resourceCard}>

@@ -1,7 +1,28 @@
-import { NextResponse } from "next/server";
+import {
+  NextRequest,
+  NextResponse,
+} from "next/server";
 
-import { getCAIRDatasets } from "@/lib/cair/config";
-import { listCAIRDirectory } from "@/lib/storage/cair-storage";
+import {
+  getCAIRRequestIdentity,
+} from "@/lib/cair/request-identity";
+
+import {
+  getAuthorizedCAIRDatasetForIdentity,
+} from "@/lib/cair/request-authorization";
+import { acquireScanSlot } from "@/lib/downloads/admission";
+
+import {
+  isPublicCAIRPath,
+  listCAIRDirectory,
+} from "@/lib/storage/cair-storage";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+const responseHeaders = {
+  "Cache-Control": "private, no-store",
+};
 
 type RouteContext = {
   params: Promise<{
@@ -10,26 +31,39 @@ type RouteContext = {
 };
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   context: RouteContext,
 ) {
+  // Step 1: Authenticate the requester.
+  const identity =
+    await getCAIRRequestIdentity(request);
+
+  if (!identity) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      {
+        status: 401,
+        headers: responseHeaders,
+      },
+    );
+  }
+
   const { datasetId } = await context.params;
 
-  const { searchParams } = new URL(request.url);
-
-  const relativePath =
-    searchParams.get("path")?.trim() ?? "";
-
-  const datasets = getCAIRDatasets();
-
-  const dataset = datasets.find(
-    (item) => item.id === datasetId,
-  );
+  // Step 2: Verify dataset authorization.
+  const dataset =
+    getAuthorizedCAIRDatasetForIdentity(
+      identity,
+      datasetId,
+    );
 
   if (!dataset) {
     return NextResponse.json(
       { error: "Dataset not found." },
-      { status: 404 },
+      {
+        status: 404,
+        headers: responseHeaders,
+      },
     );
   }
 
@@ -39,7 +73,36 @@ export async function GET(
         error:
           "This dataset does not have a browse root configured.",
       },
-      { status: 400 },
+      {
+        status: 400,
+        headers: responseHeaders,
+      },
+    );
+  }
+
+  const relativePath =
+    request.nextUrl.searchParams.get("path")?.trim() ?? "";
+
+  if (
+    !isPublicCAIRPath(
+      relativePath,
+      dataset.hiddenDirectories,
+    )
+  ) {
+    return NextResponse.json(
+      { error: "Directory not found." },
+      {
+        status: 404,
+        headers: responseHeaders,
+      },
+    );
+  }
+
+  const release = acquireScanSlot(identity);
+  if (!release) {
+    return NextResponse.json(
+      { error: "Too many active scans. Retry later." },
+      { status: 429, headers: { ...responseHeaders, "Retry-After": "30" } },
     );
   }
 
@@ -49,8 +112,6 @@ export async function GET(
       relativePath,
     );
 
-    // Dataset-specific directories that should not be
-    // exposed through the public browser.
     const hiddenDirectories = new Set(
       dataset.hiddenDirectories ?? [],
     );
@@ -66,14 +127,19 @@ export async function GET(
         path: entry.path,
       }));
 
-    return NextResponse.json({
-      dataset: {
-        id: dataset.id,
-        title: dataset.title,
+    return NextResponse.json(
+      {
+        dataset: {
+          id: dataset.id,
+          title: dataset.title,
+        },
+        path: relativePath,
+        directories,
       },
-      path: relativePath,
-      directories,
-    });
+      {
+        headers: responseHeaders,
+      },
+    );
   } catch (error) {
     console.error(
       `Unable to list directories for dataset "${datasetId}".`,
@@ -82,9 +148,15 @@ export async function GET(
 
     return NextResponse.json(
       {
-        error: "Unable to list dataset directories.",
+        error:
+          "Unable to list dataset directories.",
       },
-      { status: 500 },
+      {
+        status: 500,
+        headers: responseHeaders,
+      },
     );
+  } finally {
+    release();
   }
 }
