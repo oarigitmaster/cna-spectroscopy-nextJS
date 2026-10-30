@@ -341,6 +341,11 @@ p {
   text-decoration: none;
 }
 
+.site-brand__logo-link {
+  display: block;
+  flex-shrink: 0;
+}
+
 .site-brand__logo {
   display: block;
 
@@ -359,7 +364,9 @@ p {
 
   flex-direction: column;
 
+  color: inherit;
   line-height: 1.15;
+  text-decoration: none;
 }
 
 .site-brand__name {
@@ -871,7 +878,8 @@ p {
    FOCUS STATES
    ========================================================= */
 
-.site-brand:focus-visible,
+.site-brand__logo-link:focus-visible,
+.site-brand__text:focus-visible,
 .main-navigation__link:focus-visible,
 .main-navigation__dropdown-link:focus-visible,
 .header-contact-button:focus-visible,
@@ -1319,10 +1327,17 @@ p {
 }
 
 .footer-affiliation {
-  margin: 0;
+  width: fit-content;
   color: #ffffff;
   font-size: 0.85rem;
   font-weight: 600;
+  text-decoration: none;
+}
+
+.footer-affiliation:hover {
+  color: var(--color-brand-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .footer-column h2 {

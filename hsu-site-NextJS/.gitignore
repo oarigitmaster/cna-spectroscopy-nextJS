@@ -42,3 +42,24 @@ next-env.d.ts
 
 /config/cair-dataset-access.local.json
 /config/cair-datasets.json
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Next.js build output
+.next/
+**/.next/
+out/
+**/out/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Local development files
+.DS_Store

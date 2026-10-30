@@ -9,7 +9,6 @@ import {
 import {
   getCAIRRequestIdentity,
 } from "@/lib/cair/request-identity";
-import { acquireScanSlot } from "@/lib/downloads/admission";
 import {
   getAuthorizedCAIRDatasetForIdentity,
 } from "@/lib/cair/request-authorization";
@@ -99,14 +98,6 @@ export async function GET(
     return NextResponse.json({ error: "Path not found." }, { status: 404 });
   }
 
-  const release = acquireScanSlot(identity);
-  if (!release) {
-    return NextResponse.json(
-      { error: "Too many active scans. Retry later." },
-      { status: 429, headers: { "Retry-After": "30" } },
-    );
-  }
-
   try {
     const entries =
       await listCAIRDirectory(
@@ -155,7 +146,5 @@ export async function GET(
         status: 502,
       },
     );
-  } finally {
-    release();
   }
 }

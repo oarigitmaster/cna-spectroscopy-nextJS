@@ -10,7 +10,6 @@ import {
 import {
   getAuthorizedCAIRDatasetForIdentity,
 } from "@/lib/cair/request-authorization";
-import { acquireScanSlot } from "@/lib/downloads/admission";
 
 import {
   isPublicCAIRPath,
@@ -98,14 +97,6 @@ export async function GET(
     );
   }
 
-  const release = acquireScanSlot(identity);
-  if (!release) {
-    return NextResponse.json(
-      { error: "Too many active scans. Retry later." },
-      { status: 429, headers: { ...responseHeaders, "Retry-After": "30" } },
-    );
-  }
-
   try {
     const entries = await listCAIRDirectory(
       dataset.browseRoot,
@@ -156,7 +147,5 @@ export async function GET(
         headers: responseHeaders,
       },
     );
-  } finally {
-    release();
   }
 }

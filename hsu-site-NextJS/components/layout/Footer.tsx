@@ -16,7 +16,9 @@ export function Footer() {
             Applied research, advanced analytical services, and geoscience data resources.
           </p>
 
-          <p className="footer-affiliation">College of the North Atlantic</p>
+          <a className="footer-affiliation" href="https://www.cna.nl.ca/">
+            College of the North Atlantic website
+          </a>
         </div>
 
         {/* About */}

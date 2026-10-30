@@ -6,23 +6,29 @@ export function Header() {
   return (
     <header className="site-header">
       <div className="site-header__inner">
-        <Link
-          href="/"
-          className="site-brand"
-          aria-label="CNA Hyperspectral Scanning Unit home"
-        >
-          <img
-            className="site-brand__logo"
-            src="https://www.cna.nl.ca/Research-And-Innovation/images/CNALogoDescriptor-Cyan.svg"
-            alt="College of the North Atlantic"
-          />
+        <div className="site-brand">
+          <a
+            href="https://www.cna.nl.ca/"
+            className="site-brand__logo-link"
+            aria-label="Visit the College of the North Atlantic website"
+          >
+            <img
+              className="site-brand__logo"
+              src="https://www.cna.nl.ca/Research-And-Innovation/images/CNALogoDescriptor-Cyan.svg"
+              alt="College of the North Atlantic"
+            />
+          </a>
 
-          <span className="site-brand__text">
+          <Link
+            href="/"
+            className="site-brand__text"
+            aria-label="Hyperspectral Scanning Unit home"
+          >
             <span className="site-brand__name">
               Hyperspectral Scanning Unit
             </span>
-          </span>
-        </Link>
+          </Link>
+        </div>
 
         <div className="site-header__desktop">
           <MainNavigation />

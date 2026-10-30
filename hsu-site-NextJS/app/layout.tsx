@@ -21,10 +21,8 @@ const carme = Carme({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "CNA Hyperspectral Scanning Unit",
-    template: "%s | CNA Hyperspectral Scanning Unit",
-  },
+  title: "CNA - HSU",
+  icons: [],
   description:
     "Hyperspectral imaging, mineral analysis, drillcore resources, and related research services.",
 };
